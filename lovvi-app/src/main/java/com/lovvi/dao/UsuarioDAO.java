@@ -51,8 +51,8 @@ public class UsuarioDAO {
         }
     }
 
-    public int cadastrar(CadastroUsuarioRequest request, String genero, String tipoPerfil) throws SQLException {
-        String insertUsuario = "INSERT INTO usuario (nome, sobrenome, email, senha, cidade, genero, dt_nascimento) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public int cadastrar(CadastroUsuarioRequest request, String genero, String generoInteresse, String tipoPerfil) throws SQLException {
+        String insertUsuario = "INSERT INTO usuario (nome, sobrenome, email, senha, cidade, genero, genero_interesse, dt_nascimento) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         String insertPerfil = "INSERT INTO perfil (descricao, preferencias, objetivos, tipo_perfil, altura, id_usuario) VALUES (?, ?, ?, ?, ?, ?)";
         String insertTem = "INSERT INTO tem (id_usuario, id_interesse) VALUES (?, ?)";
 
@@ -72,7 +72,8 @@ public class UsuarioDAO {
                     ps.setString(4, request.senha());
                     ps.setString(5, request.cidade());
                     ps.setString(6, genero);
-                    ps.setDate(7, Date.valueOf(request.dtNascimento()));
+                    ps.setString(7, generoInteresse);
+                    ps.setDate(8, Date.valueOf(request.dtNascimento()));
                     ps.executeUpdate();
 
                     try (ResultSet rs = ps.getGeneratedKeys()) {
@@ -185,7 +186,7 @@ public class UsuarioDAO {
     }
 
     public UsuarioPerfil buscarPerfil(int idUsuario) throws SQLException {
-        String sql = "SELECT u.id_usuario, u.nome, u.sobrenome, u.email, u.cidade, u.genero, u.dt_nascimento, " +
+        String sql = "SELECT u.id_usuario, u.nome, u.sobrenome, u.email, u.cidade, u.genero, u.genero_interesse, u.dt_nascimento, " +
                 "p.descricao, p.preferencias, p.objetivos, p.tipo_perfil, p.altura " +
                 "FROM usuario u " +
                 "LEFT JOIN perfil p ON u.id_usuario = p.id_usuario " +
@@ -205,7 +206,7 @@ public class UsuarioDAO {
 
     public List<UsuarioPerfil> listarPerfis() throws SQLException {
         List<UsuarioPerfil> lista = new ArrayList<>();
-        String sql = "SELECT u.id_usuario, u.nome, u.sobrenome, u.email, u.cidade, u.genero, u.dt_nascimento, " +
+        String sql = "SELECT u.id_usuario, u.nome, u.sobrenome, u.email, u.cidade, u.genero, u.genero_interesse, u.dt_nascimento, " +
                 "p.descricao, p.preferencias, p.objetivos, p.tipo_perfil, p.altura " +
                 "FROM usuario u " +
                 "LEFT JOIN perfil p ON u.id_usuario = p.id_usuario";
@@ -232,6 +233,7 @@ public class UsuarioDAO {
                 rs.getString("email"),
                 rs.getString("cidade"),
                 rs.getString("genero"),
+                rs.getString("genero_interesse"),
                 nascimento != null ? nascimento.toLocalDate() : null,
                 rs.getString("descricao"),
                 rs.getString("preferencias"),

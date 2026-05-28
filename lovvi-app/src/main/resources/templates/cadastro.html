@@ -67,8 +67,15 @@
                         </select>
                     </div>
                     <div class="field">
-                        <label for="altura">Altura (m)</label>
-                        <input type="number" id="altura" name="altura" step="0.01" placeholder="1.70">
+                        <label for="genero_interesse">Interesse em genero</label>
+                        <select id="genero_interesse" name="genero_interesse" required>
+                            <option value="">Selecione</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Feminino">Feminino</option>
+                            <option value="Nao-binario">Nao-binario</option>
+                            <option value="Outro">Outro</option>
+                            <option value="Todos">Todos</option>
+                        </select>
                     </div>
                 </div>
 
@@ -82,6 +89,13 @@
                             <option value="amizade">Amizade</option>
                         </select>
                     </div>
+                    <div class="field">
+                        <label for="altura">Altura (m)</label>
+                        <input type="number" id="altura" name="altura" step="0.01" placeholder="1.70">
+                    </div>
+                </div>
+
+                <div class="form-row single">
                     <div class="field">
                         <label for="objetivos">Objetivos</label>
                         <input type="text" id="objetivos" name="objetivos" placeholder="O que voce busca?">

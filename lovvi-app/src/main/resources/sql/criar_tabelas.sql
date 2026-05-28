@@ -7,6 +7,8 @@ CREATE TABLE usuario (
     cidade        VARCHAR(100),
     genero        VARCHAR(30)  NOT NULL
                   CHECK (genero IN ('Masculino', 'Feminino', 'Nao-binario', 'Outro')),
+    genero_interesse VARCHAR(30) NOT NULL DEFAULT 'Todos'
+                  CHECK (genero_interesse IN ('Masculino', 'Feminino', 'Nao-binario', 'Outro', 'Todos')),
     dt_nascimento DATE         NOT NULL,
     CONSTRAINT pk_usuario    PRIMARY KEY (id_usuario),
     CONSTRAINT uq_usuario_email UNIQUE (email)

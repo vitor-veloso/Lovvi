@@ -11,6 +11,7 @@ public record UsuarioPerfil(
         String email,
         String cidade,
         String genero,
+        String generoInteresse,
         LocalDate dtNascimento,
         String descricao,
         String preferencias,

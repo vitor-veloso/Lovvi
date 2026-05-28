@@ -119,6 +119,7 @@ async function handleCadastro(event) {
     senha: form.senha?.value?.trim() || '',
     cidade: form.cidade?.value?.trim() || '',
     genero: normalizeGender(form.genero?.value || ''),
+    generoInteresse: normalizeGender(form.genero_interesse?.value || ''),
     dtNascimento: form.dt_nascimento?.value || '',
     descricao: form.descricao?.value?.trim() || '',
     preferencias: form.preferencias?.value?.trim() || '',
@@ -128,7 +129,7 @@ async function handleCadastro(event) {
     interesses: getSelectedInterestIds()
   };
 
-  if (!payload.nome || !payload.sobrenome || !payload.email || !payload.senha || !payload.cidade || !payload.genero || !payload.dtNascimento || !payload.tipoPerfil) {
+  if (!payload.nome || !payload.sobrenome || !payload.email || !payload.senha || !payload.cidade || !payload.genero || !payload.generoInteresse || !payload.dtNascimento || !payload.tipoPerfil) {
     setMessage('formMsg', 'Preencha todos os campos obrigatorios corretamente.', 'error');
     return;
   }
