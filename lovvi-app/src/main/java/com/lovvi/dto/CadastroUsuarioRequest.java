@@ -11,6 +11,7 @@ public record CadastroUsuarioRequest(
         String senha,
         String cidade,
         String genero,
+        String generoInteresse,
         LocalDate dtNascimento,
         String descricao,
         String preferencias,

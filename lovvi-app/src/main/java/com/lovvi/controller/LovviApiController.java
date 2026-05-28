@@ -59,6 +59,20 @@ public class LovviApiController {
         };
     }
 
+    private String normalizeGeneroInteresse(String generoInteresse) {
+        if (generoInteresse == null) {
+            return "Todos";
+        }
+        return switch (generoInteresse.toLowerCase()) {
+            case "todos", "t" -> "Todos";
+            case "m", "masculino" -> "Masculino";
+            case "f", "feminino" -> "Feminino";
+            case "o", "outro" -> "Outro";
+            case "nao-binario", "nao binario", "nao_binario" -> "Nao-binario";
+            default -> generoInteresse;
+        };
+    }
+
     private String normalizeTipoPerfil(String tipoPerfil) {
         if (tipoPerfil == null) {
             return null;
@@ -94,6 +108,7 @@ public class LovviApiController {
             int userId = usuarioDAO.cadastrar(
                     request,
                     normalizeGenero(request.genero()),
+                    normalizeGeneroInteresse(request.generoInteresse()),
                     normalizeTipoPerfil(request.tipoPerfil())
             );
             return ResponseEntity.ok(new CadastroUsuarioResult(userId));
@@ -117,6 +132,10 @@ public class LovviApiController {
 
             for (UsuarioPerfil candidate : allProfiles) {
                 if (candidate.idUsuario() == source.idUsuario() || usuariosComInteracao.contains(candidate.idUsuario())) {
+                    continue;
+                }
+
+                if (!generosCompativeis(source, candidate)) {
                     continue;
                 }
 
@@ -207,6 +226,22 @@ public class LovviApiController {
             logger.error("Erro ao recusar match entre {} e {}", idUsuario, idCandidato, e);
             return ResponseEntity.internalServerError().build();
         }
+    }
+
+    private boolean generosCompativeis(UsuarioPerfil source, UsuarioPerfil candidate) {
+        if (source.genero() == null || candidate.genero() == null) {
+            return false;
+        }
+
+        String interesseSource = source.generoInteresse() == null ? "Todos" : source.generoInteresse();
+        String interesseCandidate = candidate.generoInteresse() == null ? "Todos" : candidate.generoInteresse();
+
+        boolean sourceAceita = interesseSource.equalsIgnoreCase("Todos")
+                || interesseSource.equalsIgnoreCase(candidate.genero());
+        boolean candidateAceita = interesseCandidate.equalsIgnoreCase("Todos")
+                || interesseCandidate.equalsIgnoreCase(source.genero());
+
+        return sourceAceita && candidateAceita;
     }
 
     private MatchResultado toMatchResultado(UsuarioPerfil source, UsuarioPerfil candidate, double score) throws SQLException {
